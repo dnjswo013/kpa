@@ -29,7 +29,9 @@ class PhotoViewScreenState extends ConsumerState<PhotoViewScreen> {
       // AppBarの裏までbodyの表示エリアを広げる
       // 透明なAppBarを作る
       appBar: AppBar(
+        toolbarHeight: 0,
         backgroundColor: Colors.transparent,
+        automaticallyImplyLeading: false,
         elevation: 0,
       ),
       body: Stack(
