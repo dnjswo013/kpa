@@ -13,6 +13,7 @@ class PhotoViewScreen extends ConsumerStatefulWidget {
 
 class PhotoViewScreenState extends ConsumerState<PhotoViewScreen> {
   late PageController _controller;
+  bool _showAppBar = false;
 
   @override
   void initState() {
@@ -52,8 +53,39 @@ class PhotoViewScreenState extends ConsumerState<PhotoViewScreen> {
                     controller: _controller,
                     onPageChanged: (int index) => {},
                     children: photoList.map((Photo photo) {
-                      return Image.network(
-                        photo.imageURL,
+                      return Scaffold(
+                        extendBodyBehindAppBar: true,
+                        appBar: _showAppBar
+                            ? AppBar(
+                                title: Text(photo.createdAt.toString()),
+                                toolbarHeight: 50.0,
+                              )
+                            : null,
+                        body: Center(
+                          child: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _showAppBar = !_showAppBar;
+                              });
+                            },
+                            child: Image.network(
+                              loadingBuilder:
+                                  (context, child, loadingProgress) {
+                                if (loadingProgress == null) {
+                                  return child;
+                                }
+                                return Center(
+                                  child: CircularProgressIndicator(
+                                    value: (loadingProgress
+                                            .cumulativeBytesLoaded /
+                                        loadingProgress.expectedTotalBytes!),
+                                  ),
+                                );
+                              },
+                              photo.imageURL,
+                            ),
+                          ),
+                        ),
                       );
                     }).toList(),
                   );
